@@ -48,7 +48,7 @@ A collection of Python scripts for scraping Kia parts data using Playwright. Sup
 
 - `extract_kia_links.py`: Helper script to extract assembly page URLs from category/model pages.
 
-- `navigate_kia_parts.py`: Example script demonstrating navigation through the parts website.
+- `navigate_kia_parts.py`: Example script to crowl through the parts website.
 
 ## Setup
 
@@ -132,7 +132,7 @@ Feel free to open issues or submit pull requests.
 
 MIT License
 
-Copyright (c) 2025 [Your Name]
+Copyright (c) 2025 Lahiru
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
