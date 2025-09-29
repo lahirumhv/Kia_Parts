@@ -1,0 +1,37 @@
+# Python bytecode files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+
+# Playwright browser data
+.pw_user/
+
+# Project output files
+kia_parts.json
+kia_parts_data_*.csv
+kia_parts_scraper_*.log
+failed_urls.txt
+proxies.txt
+
+# IDE settings
+.vscode/
+.idea/
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Environment variables
+.env
+.venv/
+.pw_user/
+__pycache__/
+*.pyc
+kia_parts.json
+assembly_urls.txt
