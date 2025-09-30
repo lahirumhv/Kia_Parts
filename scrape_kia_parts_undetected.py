@@ -12,8 +12,12 @@ from datetime import datetime
 from typing import List, Dict, Optional
 import json
 
+# Create output directory if it doesn't exist
+output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "output")
+os.makedirs(output_dir, exist_ok=True)
+
 # Set up logging
-log_filename = f"kia_parts_scraper_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+log_filename = os.path.join(output_dir, f"kia_parts_scraper_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log")
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -106,7 +110,9 @@ def scrape_parts_from_page(driver, url: str, wait_time: int = 30) -> List[Dict]:
 
 def main():
     urls_file = "assembly_urls.txt"
-    output_file = f"kia_parts_data_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    output_file = os.path.join(output_dir, f"kia_parts_data_{timestamp}.csv")
+    compressed_file = os.path.join(output_dir, f"kia_parts_compressed_{timestamp}.csv")
     all_parts_data = []
     successful_urls = set()
     failed_urls = set()
@@ -132,6 +138,9 @@ def main():
                         if i % 5 == 0:
                             df = pd.DataFrame(all_parts_data)
                             df.to_csv(output_file, index=False)
+                            # Also save the compressed version
+                            compressed_df = df[['Assembly', 'Part Name', 'Part Number']].copy()
+                            compressed_df.to_csv(compressed_file, index=False)
                             logger.info(f"Progress saved: {i}/{total_urls} URLs processed")
                     else:
                         failed_urls.add(url)
@@ -151,19 +160,25 @@ def main():
         
         # Save final results
         if all_parts_data:
+            # Save full data to CSV
             df = pd.DataFrame(all_parts_data)
             df.to_csv(output_file, index=False)
             logger.info(f"Final data saved to {output_file}")
             
+            # Save compressed version with only Assembly, Part Name, and Part Number
+            compressed_df = df[['Assembly', 'Part Name', 'Part Number']].copy()
+            compressed_df.to_csv(compressed_file, index=False)
+            logger.info(f"Compressed data saved to {compressed_file}")
+            
             # Also save as JSON for backup
-            json_file = output_file.replace('.csv', '.json')
+            json_file = os.path.join(output_dir, os.path.basename(output_file).replace('.csv', '.json'))
             with open(json_file, 'w') as f:
                 json.dump(all_parts_data, f, indent=4)
             logger.info(f"Backup JSON saved to {json_file}")
         
         # Save failed URLs if any
         if failed_urls:
-            failed_file = "failed_urls.txt"
+            failed_file = os.path.join(output_dir, "failed_urls.txt")
             with open(failed_file, 'w') as f:
                 for url in failed_urls:
                     f.write(f"{url}\n")
