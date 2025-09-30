@@ -18,7 +18,7 @@ def get_partnum(url = url):
     if meta_tag:
         content_str = meta_tag["content"]
         parts_list = [item.strip() for item in content_str.split(",") if item.strip()]
-        print(len(parts_list))
+        print(parts_list)
         return parts_list
         #print("Found content:", meta_tag["content"])
     else:
