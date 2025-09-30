@@ -10,6 +10,7 @@ ENV/
 
 # Playwright browser data
 .pw_user/
+.pw_user_undetected/
 
 # Project output files
 kia_parts.json
