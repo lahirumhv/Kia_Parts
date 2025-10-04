@@ -1,38 +1,101 @@
 # Kia Parts Scraper
 
-Small scraper that uses Playwright (sync API) to load pages and BeautifulSoup to parse Kia parts pages.
+A Python-based web scraper for extracting Kia parts information using undetected-chromedriver. This tool allows you to scrape parts data by providing a VIN number, automatically navigating through categories, and collecting detailed parts information.
 
-Quick setup (macOS, zsh):
+## Features
 
-1. Install pyenv (optional but recommended) and a recent Python. Example:
+- VIN-based parts lookup
+- Automatic category and assembly navigation
+- Data organized by VIN number
+- Progress tracking and error handling
+- Output in multiple formats (CSV, JSON)
+- Compressed data output option
 
-   brew install pyenv
-   pyenv install 3.12.3
-   pyenv local 3.12.3
+## Setup
 
-2. Create and activate a virtualenv in the project root:
+1. Install Python 3.12 or later (recommended)
 
-   python -m venv .venv
-   source .venv/bin/activate
+2. Create and activate a virtual environment:
+```bash
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+```
 
-3. Install dependencies and Playwright browsers:
+3. Install dependencies:
+```bash
+pip install --upgrade pip setuptools wheel
+pip install -r requirements.txt
+```
 
-   pip install --upgrade pip setuptools wheel
-   pip install -r requirements.txt
-   python -m playwright install
+## Usage
 
-Run:
+Run the main script:
+```bash
+python kia_parts.py
+```
 
-   python scrape_kia_parts.py
+The script will:
+1. Prompt for a VIN number
+2. Validate the VIN and search for the vehicle
+3. Create a VIN-specific directory for output files
+4. Navigate through all categories and collect assembly URLs
+5. Scrape parts data from each assembly page
+6. Save data in multiple formats with automatic progress tracking
 
-Files:
-- `scrape_kia_parts.py` — scrapes a parts page and writes `kia_parts.json`.
-- `extract_kia_links.py`, `navigate_kia_parts.py` — helper scripts for navigation and link extraction.
+### Output Structure
 
-Notes:
-- The scripts use a Playwright persistent profile directory named `.pw_user`. Remove it to start fresh.
-- Add any additional dependencies to `requirements.txt`.
-# Kia Parts Scraper
+For each VIN, the script creates a directory structure:
+```
+output/
+    {VIN_NUMBER}/
+        assembly_urls.txt           # List of all assembly URLs
+        kia_parts_data_{timestamp}.csv      # Complete parts data
+        kia_parts_compressed_{timestamp}.csv # Simplified parts data
+        kia_parts_data_{timestamp}.json     # JSON backup
+        kia_parts_scraper_{timestamp}.log   # Detailed log file
+        failed_urls.txt            # URLs that failed to scrape (if any)
+```
+
+### Data Formats
+
+1. Complete CSV (`kia_parts_data_{timestamp}.csv`):
+   - Assembly
+   - Part Name
+   - Part Number
+   - Price
+   - Quantity
+   - Product URL
+   - Assembly URL
+
+2. Compressed CSV (`kia_parts_compressed_{timestamp}.csv`):
+   - Assembly
+   - Part Name
+   - Part Number
+
+## Scripts
+
+- `kia_parts.py`: Main script combining all functionality
+- `navigate_kia_parts_undetected.py`: Handles VIN search and URL collection
+- `scrape_kia_parts_undetected.py`: Manages parts data extraction
+
+## Error Handling
+
+- Invalid VIN numbers are detected early
+- Failed URLs are tracked separately
+- Automatic progress saving every 5 URLs
+- Detailed logging of all operations
+
+## Notes
+
+- The script uses undetected-chromedriver to bypass anti-bot measures
+- Random delays are implemented between requests
+- Progress is automatically saved in case of interruption
+- Data is backed up in multiple formats
+- Chrome browser must be installed on the system
+- In case of connection errors, try:
+  1. Updating Chrome to the latest version
+  2. Running `pip install -U undetected-chromedriver`
+  3. Clearing the `.pw_user_undetected` directory
 
 A collection of Python scripts for scraping Kia parts data using Playwright. Supports both single-page scraping and bulk assembly processing with various proxy options.
 

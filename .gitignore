@@ -1,23 +1,39 @@
-# Python bytecode files
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
+.pytest_cache/
+*.pyc
 
-# Virtual environment
+# Virtual Environment
 .venv/
 venv/
 ENV/
 
-# Playwright browser data
-.pw_user/
+# Chrome User Data
 .pw_user_undetected/
+.pw_user/
 
-# Project output files
-kia_parts.json
-kia_parts_data_*.csv
-kia_parts_scraper_*.log
+# Output directories and files
+output/
+*.log
+*.csv
+*.json
+assembly_urls.txt
 failed_urls.txt
-proxies.txt
+
+# IDE
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Environment variables
+.env
+.env.local
 
 # IDE settings
 .vscode/
